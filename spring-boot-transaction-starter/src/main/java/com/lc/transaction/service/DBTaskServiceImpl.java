@@ -47,11 +47,11 @@ public class DBTaskServiceImpl implements DBTaskService {
     @Override
     public DBTransactionTask getDBTransactionTask(Long taskId) {
         DBTransactionTask dbTransactionTask = dBTransactionTaskRepository.getOne(taskId);
-        if (dbTransactionTask != null
-                && !dbTransactionTask.getStatus().equals(DBTransactionTask.StatusEnum.CHECK_SUCCEED.key)) {
-            return dbTransactionTask;
+        if (dbTransactionTask == null
+                || dbTransactionTask.getStatus().equals(DBTransactionTask.StatusEnum.CHECK_SUCCEED.key)) {
+            return null;
         }
-        return null;
+        return dbTransactionTask;
     }
 
     @Override
