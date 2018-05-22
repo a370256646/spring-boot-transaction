@@ -61,7 +61,7 @@ public class DBTransactionTask implements Serializable {
      * 预期参与者
      */
     @Column(name = "expects")
-    private Set<String> expects;
+    private String[] expects;
     /**
      * 预期参与者人数
      */
