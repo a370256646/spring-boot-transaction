@@ -1,0 +1,31 @@
+server:
+    port: 8080
+spring:
+  application:
+    name: transaction-demo
+  kafka:
+    bootstrap-servers: localhost:9092
+    consumer:
+      group-id: transaction-group-${server.port}
+      enable-auto-commit: false
+    listener:
+      ack-mode: MANUAL_IMMEDIATE
+  redis:
+     host: localhost # Redis服务器地址
+     port: 6379  # Redis服务器连接端口
+  datasource:
+     url: jdbc:mysql://localhost:33061/db_transaction?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&autoReconnect=true&useSSL=false&useOldAliasMetadataBehavior=true
+     username: root
+     password: 123456
+     driver-class-name: com.mysql.jdbc.Driver
+     dbcp2:
+       initial-size: 10 #连接初始化大小
+       min-idle: 1   #最小连接
+       max-total: 20  #最大连接
+       max-wait-millis: 60000  # 配置获取连接等待超时的时间
+       time-between-eviction-runs-millis: 60000  # 配置间隔多久才进行一次检测，检测需要关闭的空闲连接，单位是毫秒
+       min-evictable-idle-time-millis: 300000 # 配置一个连接在池中最小生存的时间，单位是毫秒
+  jpa:
+    hibernate:
+      ddl-auto: create
+    show-sql: true
