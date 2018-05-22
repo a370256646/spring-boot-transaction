@@ -156,7 +156,6 @@ public class ListenEvent {
      * @return 返回子任务对象
      */
     private DistributionTask defaultLock(TransactionTask transactionTask, String possessor) throws Exception {
-        //加锁
         return distributionTaskRepository.save(DistributionTask.builder()
                 .taskId(transactionTask.getId())
                 .possessor(possessor)
