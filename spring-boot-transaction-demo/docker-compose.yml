@@ -1,12 +1,17 @@
+ redis:
+     container_name: transaction-redis
+     image: redis:4.0
+     ports:
+       - "6379:6379"
  zookeeper:
-   container_name: zookeeper
+   container_name: transaction-zookeeper
    restart: always
    image: zookeeper:3.4.11
    ports:
       - "2181:2181"
 
  kafka:
-   container_name: kafka
+   container_name: transaction-kafka
    image: wurstmeister/kafka
    restart: always
    links:
@@ -19,6 +24,7 @@
        KAFKA_ZOOKEEPER_CONNECT: zk:2181
 
  mysql:
+  container_name: transaction-mysql
   image: mysql:5.6.23
   ports:
     - "33061:3306"
@@ -28,7 +34,4 @@
      MYSQL_DATABASE: db_transaction
   command: --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
 
-  redis:
-    image: redis:4.0
-    ports:
-      - "6379:6379"
+
