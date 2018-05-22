@@ -72,20 +72,20 @@ public class ListenEvent {
         DistributionTask lock;
         //获得任务并且根据处理机制过滤
         Object task = getHandleTask(taskId);
-        if (task instanceof DistributionTask) {
-            transactionTask = (TransactionTask) task;
-        } else {
+        if (task instanceof Boolean) {
             return (boolean) task;
+        } else {
+            transactionTask = (TransactionTask) task;
         }
         //执行锁策略
         Object check = checkLock(transactionTask);
-        if (check instanceof DistributionTask) {
-            lock = (DistributionTask) check;
-        } else {
+        if (check instanceof Boolean) {
             return (boolean) check;
+        } else {
+            lock = (DistributionTask) check;
         }
         //执行事务机制
-        boolean fag = invoke(transactionTask);
+        boolean fag = invoke(transactionTask,lock);
         if (!fag) {
             log.error("当前任务执行事务失败 taskId:" + taskId);
         }
@@ -105,7 +105,7 @@ public class ListenEvent {
             return false;
         }
         TransactionTask transactionTask = optional.get();
-        if (!transactionTask.getExpects().contains(serverConfig.getSossessor())) {
+        if (!transactionTask.getExpects().contains(serverConfig.getSponsor())) {
             log.info("当前服务不是该任务的参与者，默认消费掉 taskId:" + taskId);
             return true;
         }
@@ -170,7 +170,7 @@ public class ListenEvent {
      * @param transactionTask 事务任务
      * @return 返回成功或者失败
      */
-    private boolean invoke(TransactionTask transactionTask) {
+    private boolean invoke(TransactionTask transactionTask ,DistributionTask lock) throws Exception{
         DistributionTaskInvoke rlt = new DistributionTaskInvoke();
         try {
             Class clz = configService.getClass(transactionTask.getTheme());
@@ -188,6 +188,8 @@ public class ListenEvent {
         } finally {
             //保存到数据库
             log.info("持久化子任务结果 taskId:" + transactionTask.getId());
+            rlt.setDistributionTaskId(lock.getId());
+            rlt.setPossessor(serverConfig.getSossessor());
             dBTaskService.seveDistributionTaskInvoke(rlt);
         }
         return rlt.getSucceed();

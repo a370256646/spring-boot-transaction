@@ -78,7 +78,8 @@ public class DBTransactionTask implements Serializable {
      * 创建时间
      */
     @Column(name = "create_at")
-    private Date createAt;
+    @Builder.Default
+    private Date createAt = new Date();
     /**
      * 修改时间
      */
