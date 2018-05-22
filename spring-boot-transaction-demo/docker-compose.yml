@@ -5,7 +5,6 @@
        - "6379:6379"
  zookeeper:
    container_name: transaction-zookeeper
-   restart: always
    image: zookeeper:3.4.11
    ports:
       - "2181:2181"
@@ -13,7 +12,6 @@
  kafka:
    container_name: transaction-kafka
    image: wurstmeister/kafka
-   restart: always
    links:
        - zookeeper:zk
    ports:
