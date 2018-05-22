@@ -68,7 +68,7 @@ public class SendEvent {
             dBTaskService.updateTransactionTask(transactionTask.getId(), DBTransactionTask.StatusEnum.WAIT_CHECK.key);
         } catch (Exception e) {
             e.printStackTrace();
-            log.info("kafka消息发送失败：theme=" + theme + " |parameters=" + parameters.toString() +
+            log.info("kafka消息发送失败：theme=" + theme + " |parameters=" + (parameters == null ? "" : parameters.toString()) +
                     " |expects=" + expects.toString(), e);
             dBTaskService.updateTransactionTaskError(transactionTask.getId(), e.getStackTrace().toString());
         }
